@@ -1,2 +1,2 @@
 
-## Generate them tables --- `npm run migrate`
+##  Diet Diary - `Track  your dairy meals!`
