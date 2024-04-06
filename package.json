@@ -1,0 +1,39 @@
+{
+  "name": "diet-diary",
+  "version": "0.0.1",
+  "private": true,
+  "main": "server.js",
+  "license": "MIT",
+  "author": "Humphrey Mutuma",
+  "description": "A simple  Diary for planning Diet ",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "production": "NODE_ENV=production",
+    "db:migrate": "npx prisma migrate dev --name user-entity --create-only && yarn prisma generate",
+    "db:push": "npx prisma db push"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.11.0",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1",
+    "pg": "^8.11.3",
+    "postgres": "^3.4.4",
+    "sql-template-strings": "^2.2.2",
+    "swagger-ui-express": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.7",
+    "@types/node": "^20.12.3",
+    "@types/swagger-ui-express": "^4.1.6",
+    "dotenv": "^16.4.5",
+    "nodemon": "^3.1.0",
+    "prisma": "^5.12.0",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.4.3"
+  }
+}
