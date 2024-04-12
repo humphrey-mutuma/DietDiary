@@ -53,7 +53,7 @@ const createMeal = asyncErrorHandler(async (req, res, next) => {
         dinner,
         snacks,
         notes,
-        userId: parseInt(userId),
+        userId: userId,
       },
     });
     if (newUser) {

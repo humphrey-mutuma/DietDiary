@@ -5,10 +5,34 @@ import { asyncErrorHandler } from "../middlewares/asyncErrorHandler.middleware";
 // @route   GET /api/users/ id
 const getUser = asyncErrorHandler(async (req, res, next) => {
   const { id } = req.params;
+  // const { startDate, endDate } = req.query;
+  const startDate: string = req.query.startDate as string;
+  const endDate: string = req.query.endDate as string;
+
   try {
     const user = await prismaClient.user.findUnique({
       where: {
-        id: parseInt(id),
+        id: id,
+      },
+      include: {
+        plans: {
+          where: {
+            date: {
+              gte: new Date(startDate),
+              lte: new Date(endDate),
+            },
+          },
+          select: {
+            id: true,
+            breakfast: true,
+            date: true,
+            dinner: true,
+            lunch: true,
+            notes: true,
+            snacks: true,
+            createdAt: true,
+          },
+        },
       },
     });
     if (user) {
@@ -75,7 +99,7 @@ const updateUser = asyncErrorHandler(async (req, res, next) => {
   try {
     const newUser = await prismaClient.user.update({
       where: {
-        id: parseInt(id),
+        id: id,
       },
       data: {
         email,
@@ -105,7 +129,7 @@ const deleteUser = asyncErrorHandler(async (req, res, next) => {
   try {
     const deletedUser = await prismaClient.user.delete({
       where: {
-        id: parseInt(id),
+        id: id,
       },
     });
     if (deletedUser) {
