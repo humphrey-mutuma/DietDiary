@@ -1,16 +1,20 @@
 import express from "express";
 import {
-  getUser,
   getUsers,
-  createUser,
+  getUserDetails,
   updateUser,
   deleteUser,
 } from "../controllers/user.controller";
+import { protect } from "../middlewares/auth.middleware";
 
 const router = express.Router();
 
 /*  user listing. */
-router.route("/").get(getUsers).post(createUser);
-router.route("/:id").get(getUser).put(updateUser).delete(deleteUser);
+router.route("/").get(protect, getUsers);
+router
+  .route("/:id")
+  .get(protect, getUserDetails)
+  .put(protect, updateUser)
+  .delete(protect, deleteUser);
 
 export default router;

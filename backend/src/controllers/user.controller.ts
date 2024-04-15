@@ -1,9 +1,11 @@
 import { disconnectClient, prismaClient } from "../config/db";
 import { asyncErrorHandler } from "../middlewares/asyncErrorHandler.middleware";
+import jwt from "jsonwebtoken";
+import { User } from "../utils/types";
 
 // @desc    Get a user
 // @route   GET /api/users/ id
-const getUser = asyncErrorHandler(async (req, res, next) => {
+const getUserDetails = asyncErrorHandler(async (req, res, next) => {
   const { id } = req.params;
   // const { startDate, endDate } = req.query;
   const startDate: string = req.query.startDate as string;
@@ -56,32 +58,6 @@ const getUsers = asyncErrorHandler(async (req, res, next) => {
   } catch (error) {
     console.error(error);
     next(error); // Forward the error to the error handling middleware
-  } finally {
-    await disconnectClient();
-  }
-});
-
-// @desc    create a user
-// @route   POST /api/users
-const createUser = asyncErrorHandler(async (req, res, next) => {
-  const { email, name } = req.body;
-  if (!email?.trim() || !name?.trim()) {
-    return res.status(400).json({ message: "Missing email or name!" });
-  }
-  try {
-    const newUser = await prismaClient.user.create({
-      data: {
-        email,
-        name,
-      },
-    });
-    if (newUser) {
-      return res.status(200).json(newUser);
-    }
-  } catch (error) {
-    console.error(error);
-    next(error); // Forward the error to the error handling middleware
-    return res.status(400).json(error);
   } finally {
     await disconnectClient();
   }
@@ -144,4 +120,4 @@ const deleteUser = asyncErrorHandler(async (req, res, next) => {
   }
 });
 
-export { getUser, getUsers, createUser, updateUser, deleteUser };
+export { getUserDetails, getUsers, updateUser, deleteUser };

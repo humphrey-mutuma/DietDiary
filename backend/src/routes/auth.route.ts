@@ -1,23 +1,21 @@
-import { ExpressAuth } from "@auth/express";
 import express from "express";
- import { PrismaAdapter } from "@auth/prisma-adapter";
-import { PrismaClient } from "@prisma/client";
+import {
+  loginUserHandler,
+  registerUserHandler,
+  loginUserOutHandler,
+  refreshAccessTokenHandler,
+} from "../controllers/auth.controller";
+import { protect } from "../middlewares/auth.middleware";
 
-const app = express();
-const prisma = new PrismaClient();
+const router = express.Router();
 
-// If app is served through a proxy
-// trust the proxy to allow HTTPS protocol to be detected
-app.use("trust proxy");
-app.use("/auth/*", ExpressAuth({ providers: [] }));
+/*  user listing. */
+router.route("/register").post(registerUserHandler);
+router.route("/login").post(loginUserHandler);
+router.route("/logout").post(protect, loginUserOutHandler);
+router.route("/forgot-password").post();
+router.route("/resetpassword").post();
+router.route("/verify-email").post();
+router.route("/refresh").get(refreshAccessTokenHandler); // refresh access token
 
-
- 
-app.set("trust proxy", true);
-app.use(
-  "/auth/*",
-  ExpressAuth({
-    providers: [],
-    adapter: PrismaAdapter(prisma),
-  })
-);
+export default router;

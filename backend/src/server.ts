@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 dotenv.config();
 import usersRouter from "./routes/users.route";
 import mealsRouter from "./routes/meals.route";
+import authRouter from "./routes/auth.route";
 import { notFound, errorHandler } from "./middlewares/error.middleWare";
 import swaggerUi from "swagger-ui-express";
 import cors from "cors";
@@ -24,6 +25,7 @@ app.use(cors(corsOptions));
 // define route path
 app.use("/api/users", usersRouter);
 app.use("/api/meals", mealsRouter);
+app.use("/api/auth", authRouter);
 // app.use("/api/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // catch 404 and forward to error handler

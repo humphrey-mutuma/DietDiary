@@ -14,14 +14,20 @@ model User {
   emailVerified DateTime?
   image         String?
   accounts      Account[]
-  sessions      Session[]
-  // Optional for WebAuthn support
-  Authenticator Authenticator[]
+  // sessions      Session[]
+  plans Meal[]
  
-  createdAt DateTime @default(now())
-  updatedAt DateTime? @updatedAt
-  // 
-   plans Meal[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime? @updatedAt
+  verified      Boolean? @default(false) 
+  password      String
+  // roles
+  role RoleEnumType? @default(user)
+
+  // verificationCode String? @db.Text @unique
+  // @@unique([email, verificationCode, access_token])
+  // @@index([email, verificationCode,access_token])
+  
 }
  
 model Account {
@@ -39,45 +45,23 @@ model Account {
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
- 
+  
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
  
   @@id([provider, providerAccountId])
 }
  
-model Session {
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+// model Session {
+//   sessionToken String   @unique
+//   userId       String
+//   expires      DateTime
+//   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
- 
-model VerificationToken {
-  identifier String
-  token      String
-  expires    DateTime
- 
-  @@id([identifier, token])
-}
- 
-// Optional for WebAuthn support
-model Authenticator {
-  id                   String  @id @default(cuid())
-  credentialID         String  @unique
-  userId               String
-  providerAccountId    String
-  credentialPublicKey  String
-  counter              Int
-  credentialDeviceType String
-  credentialBackedUp   Boolean
-  transports           String?
- 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
 
+ 
 model Meal {
   id        Int      @id @default(autoincrement())
   date      DateTime
@@ -90,4 +74,10 @@ model Meal {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   user      User     @relation(fields: [userId], references: [id])
+}
+
+
+enum RoleEnumType {
+  user
+  admin
 }
